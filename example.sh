@@ -46,6 +46,10 @@ EOF
 
 crictl runp --runtime=runc pod.json  # record the pod_id returned by this cmd
 
+# Pull container image
+CONTAINER_IMAGE="quay.io/zshi/centos:httpd-iperf"
+crictl pull $CONTAINER_IMAGE
+
 # Run a container inside pod
 cat > "container.json" << EOF
 {
@@ -53,7 +57,7 @@ cat > "container.json" << EOF
       "name": "sriov-container"
   },
   "image":{
-      "image": "quay.io/zshi/centos:httpd-iperf"
+      "image": "$CONTAINER_IMAGE"
   },
   "command": [
       "top"
