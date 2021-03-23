@@ -12,9 +12,9 @@ CRIO_VERSION="1.18"
 
 curl -L -o /etc/yum.repos.d/devel:kubic:libcontainers:stable:cri-o:${CRIO_VERSION}.repo https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable:cri-o:${CRIO_VERSION}/CentOS_8/devel:kubic:libcontainers:stable:cri-o:${CRIO_VERSION}.repo
 
-sudo yum install cri-o
+sudo yum install -y cri-o
 sed 's|/usr/libexec/crio/conmon|/usr/bin/conmon|' -i /etc/crio/crio.conf
-sudo systemctl start cri-o
+sudo systemctl start crio
 
 # Install sriov-cni: A Container Network Interface(CNI) binary used in OpenShift to attach VF into container
 
@@ -44,7 +44,7 @@ cat > "pod.json" << EOF
 }
 EOF
 
-crictl runp --runtime=runc pod.json  # record the pod_id returned by this cmd
+pod_id=$(crictl runp --runtime=runc pod.json)  # record the pod_id returned by this cmd
 
 # Pull container image
 CONTAINER_IMAGE="quay.io/zshi/centos:httpd-iperf"
@@ -68,12 +68,12 @@ cat > "container.json" << EOF
 }
 EOF
 
-crictl create ${pod_id}  container.json pod.json
+container_id=$(crictl create ${pod_id}  container.json pod.json)
 
 # Get sriov container id
 crictl ps --all
 
 # Check sriov interface inside container
-crictl exec -it ${container_id} bash
-ifconfig eth0 # execute inside container
-ethtool -i eth0 # execut inside container
+# crictl exec -it ${container_id} bash
+crictl exec ifconfig eth0 # execute inside container
+crictl exec ethtool -i eth0 # execut inside container
