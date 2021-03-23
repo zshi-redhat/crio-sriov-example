@@ -18,6 +18,7 @@ sudo systemctl start crio
 
 # Install sriov-cni: A Container Network Interface(CNI) binary used in OpenShift to attach VF into container
 
+rm -rf sriov-cni
 git clone https://github.com/openshift/sriov-cni.git
 pushd sriov-cni
 make build  # build sriov-cni binary
