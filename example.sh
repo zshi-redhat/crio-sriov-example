@@ -76,5 +76,15 @@ crictl ps --all
 
 # Check sriov interface inside container
 # crictl exec -it ${container_id} bash
-crictl exec ifconfig eth0 # execute inside container
-crictl exec ethtool -i eth0 # execut inside container
+crictl exec ${container_id} ifconfig eth0 # execute inside container
+crictl exec ${container_id} ethtool -i eth0 # execut inside container
+
+sleep 1
+
+crictl stop ${container_id}
+crictl rm ${container_id}
+
+sleep 1
+
+crictl stopp ${pod_id}
+crictl rmp ${pod_id}
